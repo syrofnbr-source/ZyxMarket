@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZYX MARKETPLACE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+        :root { --main-orange: #FFB800; }
+        body { background-color: #050505; color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; letter-spacing: -0.02em; }
+        .grid-bg { background-image: linear-gradient(rgba(255, 184, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 184, 0, 0.03) 1px, transparent 1px); background-size: 50px 50px; }
+        
+        .zyx-glow {
+            font-weight: 900; color: var(--main-orange);
+            text-shadow: 0 0 20px rgba(255, 184, 0, 0.6), 0 0 40px rgba(255, 184, 0, 0.3);
+            letter-spacing: -2px; line-height: 0.8;
+        }
+
+        .marketplace-sub {
+            color: white; font-weight: 800; font-size: 1.5rem; letter-spacing: 8px; margin-top: 10px;
+        }
+
+        .neon-box { 
+            border: 1px solid rgba(255, 184, 0, 0.1); background: rgba(10, 10, 10, 0.8); 
+            backdrop-filter: blur(20px); border-radius: 1.5rem; transition: all 0.3s ease; 
+        }
+
+        .pay-card {
+            border: 1px solid rgba(255, 255, 255, 0.05); background: rgba(255, 255, 255, 0.02);
+            transition: all 0.2s ease; cursor: pointer;
+        }
+        .pay-card.active { border-color: var(--main-orange); background: rgba(255, 184, 0, 0.1); }
+        .hidden-section { display: none !important; }
+        #cart-sidebar { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    </style>
+</head>
+<body class="grid-bg">
+
+<!-- NAVIGATION -->
+<nav class="fixed top-0 w-full z-[100] bg-black/80 backdrop-blur-md border-b border-white/5 px-6 py-4 flex justify-between items-center">
+    <div class="cursor-pointer group" onclick="location.reload()">
+        <span class="text-xl zyx-glow block">ZYX</span>
+        <span class="text-[8px] font-black tracking-[3px] text-white uppercase">Marketplace</span>
+    </div>
+    <div class="flex items-center gap-6">
+        <a href="https://discord.gg/Xxf5W4Gh" target="_blank" class="text-gray-400 hover:text-white transition text-xl"><i class="fab fa-discord"></i></a>
+        <button onclick="toggleCart()" class="relative p-2 text-gray-300 hover:text-yellow-500 transition">
+            <i class="fas fa-shopping-bag text-xl"></i>
+            <span id="cart-count" class="absolute top-0 right-0 bg-yellow-500 text-black text-[9px] font-black w-4 h-4 flex items-center justify-center rounded-full">0</span>
+        </button>
+        <button onclick="openLogin()" class="text-gray-500 hover:text-white transition text-xl"><i class="fas fa-user-shield"></i></button>
+    </div>
+</nav>
+
+<!-- MAIN SITE -->
+<div id="main-site" class="pt-24">
+    <header class="h-[50vh] flex flex-col justify-center items-center text-center px-4">
+        <h1 class="text-[80px] md:text-[130px] zyx-glow uppercase">ZYX</h1>
+        <div class="marketplace-sub uppercase">Marketplace</div>
+    </header>
+
+    <section id="products" class="py-10 px-6 max-w-7xl mx-auto">
+        <h2 class="text-2xl font-black uppercase mb-10 border-l-4 border-yellow-500 pl-4 italic">Products</h2>
+        <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="py-20 px-6 max-w-7xl mx-auto border-t border-white/5">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="neon-box p-8 text-center">
+                <div class="text-yellow-500 text-3xl mb-4">🔒</div>
+                <h3 class="font-bold uppercase text-xs mb-2">100% Secure</h3>
+                <p class="text-[11px] text-gray-500">Every sale is verified. No fraud, no risk.</p>
+            </div>
+            <div class="neon-box p-8 text-center">
+                <div class="text-yellow-500 text-3xl mb-4">⚡</div>
+                <h3 class="font-bold uppercase text-xs mb-2">Instant Delivery</h3>
+                <p class="text-[11px] text-gray-500">Auto-delivery or fast manual processing.</p>
+            </div>
+            <div class="neon-box p-8 text-center">
+                <div class="text-yellow-500 text-3xl mb-4">💬</div>
+                <h3 class="font-bold uppercase text-xs mb-2">24/7 Support</h3>
+                <p class="text-[11px] text-gray-500">Join our Discord for any assistance.</p>
+            </div>
+            <div class="neon-box p-8 text-center">
+                <div class="text-yellow-500 text-3xl mb-4">💰</div>
+                <h3 class="font-bold uppercase text-xs mb-2">Best Prices</h3>
+                <p class="text-[11px] text-gray-500">Cheapest market rates guaranteed.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-10 text-center border-t border-white/5 text-gray-600 text-[10px] uppercase tracking-widest">
+        © 2026 ZYX Marketplace.
+    </footer>
+</div>
+
+<!-- CART SIDEBAR -->
+<div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-[#0a0a0a] z-[200] border-l border-white/5 flex flex-col translate-x-full shadow-2xl">
+    <div class="p-8 border-b border-white/5 flex justify-between items-center">
+        <h2 class="text-xl font-black uppercase">Your Bag</h2>
+        <button onclick="toggleCart()" class="text-2xl hover:text-yellow-500">&times;</button>
+    </div>
+    <div id="cart-items" class="flex-grow p-6 space-y-4 overflow-y-auto"></div>
+    <div class="p-8 bg-black border-t border-white/5">
+        <div class="flex justify-between mb-6 text-lg font-black">
+            <span class="text-gray-500 uppercase text-xs">Total</span>
+            <span id="cart-total" class="text-yellow-500">0.00€</span>
+        </div>
+        <button onclick="openCheckout()" class="w-full bg-yellow-500 text-black py-4 rounded-xl font-black uppercase text-xs">Proceed to Checkout</button>
+    </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div id="checkout-modal" class="hidden-section fixed inset-0 bg-black/98 z-[600] flex items-center justify-center p-4 overflow-y-auto">
+    <div class="neon-box w-full max-w-4xl p-8 relative">
+        <button onclick="closeCheckout()" class="absolute top-6 right-6 text-2xl text-gray-500 hover:text-white">&times;</button>
+        <h2 class="text-2xl font-black uppercase mb-8 text-center text-yellow-500 italic">Marketplace Checkout</h2>
+        
+        <div class="grid lg:grid-cols-2 gap-8">
+            <div class="space-y-4">
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Customer Information</label>
+                <input id="pay-mail" type="email" placeholder="Email Address" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-yellow-500">
+                <input id="pay-discord" type="text" placeholder="Discord Username" class="w-full bg-white/5 border border-white/10 p-4 rounded-xl outline-none focus:border-yellow-500">
+                
+                <div id="payment-info" class="mt-4 p-5 rounded-2xl bg-yellow-500/5 border border-yellow-500/20 hidden"></div>
+            </div>
+
+            <div>
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4 block">Select Payment Method</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <div onclick="setMethod('pp', this)" class="pay-card p-4 rounded-xl text-center">
+                        <span class="block text-xl">💙</span><span class="text-[9px] font-bold uppercase">PayPal F&F</span>
+                    </div>
+                    <div onclick="setMethod('twint', this)" class="pay-card p-4 rounded-xl text-center">
+                        <span class="block text-xl">🇨🇭</span><span class="text-[9px] font-bold uppercase">TWINT</span>
+                    </div>
+                    <div onclick="setMethod('btc', this)" class="pay-card p-4 rounded-xl text-center">
+                        <span class="block text-xl">₿</span><span class="text-[9px] font-bold uppercase">Bitcoin</span>
+                    </div>
+                    <div onclick="setMethod('eth', this)" class="pay-card p-4 rounded-xl text-center">
+                        <span class="block text-xl">Ξ</span><span class="text-[9px] font-bold uppercase">Ethereum</span>
+                    </div>
+                    <div onclick="setMethod('ltc', this)" class="pay-card p-4 rounded-xl text-center">
+                        <span class="block text-xl">Ł</span><span class="text-[9px] font-bold uppercase">Litecoin</span>
+                    </div>
+                    <div onclick="setMethod('apple', this)" class="pay-card p-4 rounded-xl text-center">
+                        <span class="block text-xl">🍎</span><span class="text-[9px] font-bold uppercase">Apple Pay</span>
+                    </div>
+                    <div onclick="setMethod('g2a', this)" class="pay-card p-4 rounded-xl text-center col-span-2">
+                        <span class="block text-xl">🎮</span><span class="text-[9px] font-bold uppercase">G2A Giftcard</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="confirmPurchase()" class="w-full bg-yellow-500 text-black py-5 mt-10 rounded-xl font-black uppercase tracking-widest hover:bg-white transition">I HAVE PAID</button>
+    </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel" class="hidden-section fixed inset-0 bg-[#050505] z-[1000] p-10 overflow-y-auto">
+    <div class="max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-10">
+            <h2 class="text-3xl font-black text-yellow-500 uppercase italic">Admin Panel</h2>
+            <div class="flex gap-4">
+                <button onclick="clearAllProducts()" class="bg-red-600/20 border border-red-600 text-red-500 px-6 py-2 rounded-lg font-bold text-xs uppercase hover:bg-red-600 hover:text-white transition">Clear All</button>
+                <button onclick="location.reload()" class="bg-white text-black px-6 py-2 rounded-lg font-bold text-xs uppercase">Logout</button>
+            </div>
+        </div>
+        
+        <div class="neon-box p-10 mb-10">
+            <h3 class="text-sm font-black uppercase mb-6 text-gray-400 tracking-widest">Add Product</h3>
+            <div class="grid gap-6">
+                <input id="adm-name" type="text" placeholder="Product Name" class="bg-white/5 p-4 rounded-xl border border-white/10 outline-none">
+                <input id="adm-price" type="number" placeholder="Price in €" class="bg-white/5 p-4 rounded-xl border border-white/10 outline-none">
+                <div class="bg-white/5 p-8 border-2 border-dashed border-white/10 rounded-2xl text-center">
+                    <input id="adm-img" type="file" accept="image/*" class="hidden">
+                    <label for="adm-img" class="cursor-pointer text-xs font-bold uppercase text-yellow-500 hover:underline">Upload Product Image</label>
+                </div>
+                <button onclick="saveProduct()" class="bg-yellow-500 text-black py-4 rounded-xl font-black uppercase tracking-widest">Publish</button>
+            </div>
+        </div>
+
+        <div id="adm-list" class="space-y-4"></div>
+    </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="login-modal" class="hidden-section fixed inset-0 bg-black/95 z-[1100] flex items-center justify-center">
+    <div class="neon-box p-10 w-80 text-center">
+        <h2 class="font-black mb-6 uppercase text-yellow-500">Staff Access</h2>
+        <input id="login-user" type="text" placeholder="User" class="w-full bg-white/5 p-3 rounded-lg mb-4 border border-white/10 outline-none">
+        <input id="login-pass" type="password" placeholder="Pass" class="w-full bg-white/5 p-3 rounded-lg mb-4 border border-white/10 outline-none">
+        <button onclick="checkLogin()" class="w-full bg-yellow-500 text-black py-3 rounded-lg font-black uppercase text-xs">Login</button>
+        <button onclick="closeLogin()" class="mt-4 text-gray-500 text-[10px] uppercase font-bold">Close</button>
+    </div>
+</div>
+
+<script>
+    let products = JSON.parse(localStorage.getItem('zyx_products')) || [];
+    let cart = [];
+    let selectedMethod = "";
+
+    window.onload = renderProducts;
+
+    function renderProducts() {
+        const container = document.getElementById('product-list');
+        container.innerHTML = products.map((p, i) => `
+            <div class="neon-box overflow-hidden group">
+                <div class="h-48 bg-zinc-950 flex items-center justify-center p-4">
+                    <img src="${p.img}" class="h-full object-contain group-hover:scale-110 transition duration-500">
+                </div>
+                <div class="p-6 border-t border-white/5">
+                    <h3 class="text-sm font-black uppercase tracking-tight">${p.name}</h3>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-xl font-black text-yellow-500">${p.price.toFixed(2)}€</span>
+                        <button onclick="addToCart(${i})" class="bg-white text-black px-5 py-2 rounded-lg font-black uppercase text-[10px] hover:bg-yellow-500 transition">Add</button>
+                    </div>
+                </div>
+            </div>
+        `).join('') || `<p class="col-span-full text-center py-20 text-gray-600 font-bold uppercase tracking-[5px]">No items in store</p>`;
+    }
+
+    function toggleCart() {
+        const sidebar = document.getElementById('cart-sidebar');
+        sidebar.style.transform = sidebar.style.transform === 'translateX(0%)' ? 'translateX(100%)' : 'translateX(0%)';
+    }
+
+    function addToCart(index) {
+        cart.push(products[index]);
+        updateCart();
+        toggleCart();
+    }
+
+    function updateCart() {
+        document.getElementById('cart-count').innerText = cart.length;
+        let total = 0;
+        document.getElementById('cart-items').innerHTML = cart.map((item, i) => {
+            total += item.price;
+            return `<div class="bg-white/5 p-4 rounded-xl flex justify-between items-center border border-white/5">
+                <span class="text-[10px] font-bold uppercase">${item.name}</span>
+                <button onclick="removeFromCart(${i})" class="text-red-500">&times;</button>
+            </div>`;
+        }).join('');
+        document.getElementById('cart-total').innerText = total.toFixed(2) + "€";
+    }
+
+    function removeFromCart(i) { cart.splice(i, 1); updateCart(); }
+
+    function openCheckout() {
+        if(cart.length === 0) return alert("Bag is empty");
+        document.getElementById('checkout-modal').classList.remove('hidden-section');
+    }
+    function closeCheckout() { document.getElementById('checkout-modal').classList.add('hidden-section'); }
+
+    function setMethod(id, el) {
+        selectedMethod = id;
+        document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('active'));
+        el.classList.add('active');
+        const info = document.getElementById('payment-info');
+        info.classList.remove('hidden');
+        
+        let html = "";
+        switch(id) {
+            case 'pp': html = `<p class="text-[10px] font-black uppercase text-blue-400">PayPal F&F</p><p class="text-xs mt-1">mypaypalmai@l.com</p>`; break;
+            case 'btc': html = `<p class="text-[10px] font-black uppercase text-orange-500">Bitcoin</p><p class="text-[9px] mt-1 font-mono break-all">bc1q8y8mlpgkzxt3jccvr4c2lfme0fnkpktrr7c62t</p>`; break;
+            case 'eth': html = `<p class="text-[10px] font-black uppercase text-purple-400">Ethereum</p><p class="text-[9px] mt-1 font-mono break-all">0xa9F437E18766640D6A9A69BF2C20b7A45c36e311</p>`; break;
+            case 'ltc': html = `<p class="text-[10px] font-black uppercase text-blue-300">Litecoin</p><p class="text-[9px] mt-1 font-mono break-all">LgwNrb5DbH8kkzSGP7YhLaNZTTdyy9fE6W</p>`; break;
+            case 'twint': html = `<p class="text-[10px] font-black uppercase text-red-500">TWINT</p><p class="text-xs mt-1">Coming Soon</p>`; break;
+            case 'apple': html = `<p class="text-[10px] font-black uppercase text-white">Apple Pay</p><p class="text-xs mt-1">Coming Soon</p>`; break;
+            case 'g2a': html = `<p class="text-[10px] font-black uppercase text-orange-600">G2A Giftcard</p><textarea id="g2a-data" placeholder="Giftcard Code..." class="w-full bg-black mt-2 p-2 text-xs border border-white/10 rounded h-16"></textarea>`; break;
+        }
+        info.innerHTML = html;
+    }
+
+    function confirmPurchase() {
+        if(!selectedMethod) return alert("Select payment");
+        alert("Purchase recorded! Join Discord and send your proof now.");
+        cart = []; updateCart(); closeCheckout();
+    }
+
+    function openLogin() { document.getElementById('login-modal').classList.remove('hidden-section'); }
+    function closeLogin() { document.getElementById('login-modal').classList.add('hidden-section'); }
+    function checkLogin() {
+        if(document.getElementById('login-user').value === "Swipe" && document.getElementById('login-pass').value === "1234") {
+            closeLogin();
+            document.getElementById('admin-panel').classList.remove('hidden-section');
+            renderAdminList();
+        } else alert("Invalid");
+    }
+
+    function saveProduct() {
+        const name = document.getElementById('adm-name').value;
+        const price = parseFloat(document.getElementById('adm-price').value);
+        const file = document.getElementById('adm-img').files[0];
+        if(!name || !price || !file) return alert("Fill all fields");
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            products.push({ name, price, img: reader.result });
+            localStorage.setItem('zyx_products', JSON.stringify(products));
+            location.reload();
+        };
+    }
+
+    function renderAdminList() {
+        const list = document.getElementById('adm-list');
+        list.innerHTML = products.map((p, i) => `
+            <div class="bg-white/5 p-4 rounded-xl flex justify-between items-center border border-white/5">
+                <span class="text-xs font-bold uppercase">${p.name} - ${p.price}€</span>
+                <button onclick="deleteProduct(${i})" class="text-red-500 text-xs">Delete</button>
+            </div>
+        `).join('');
+    }
+
+    function deleteProduct(i) {
+        products.splice(i, 1);
+        localStorage.setItem('zyx_products', JSON.stringify(products));
+        renderAdminList();
+    }
+
+    function clearAllProducts() {
+        if(confirm("Are you sure you want to delete ALL products?")) {
+            products = [];
+            localStorage.setItem('zyx_products', JSON.stringify(products));
+            renderAdminList();
+            alert("All products cleared!");
+        }
+    }
+</script>
+</body>
+</html>
